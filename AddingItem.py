@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow,QPushButton,QSpinBox,QComboBox,QLineEdit
+from PyQt5.QtWidgets import QMainWindow,QPushButton,QSpinBox,QComboBox,QLineEdit,QMessageBox
 from PyQt5 import uic
 import os
 import json
@@ -70,7 +70,6 @@ class AddingUI(QMainWindow):
                 border: 1px solid #5c5c5c;
                 background-color: #3c3c3c;
             }
-
             QSpinBox {
                 background-color: #3c3c3c;
                 color: #ffffff;
@@ -130,6 +129,32 @@ class AddingUI(QMainWindow):
     def AddingRecipetoBill(self):
         if self.Quantity.text()=="0" or self.SelectRecipeName.currentText()=="" or float(self.DiscountPer.text())>100 or float(self.DiscountPer.text())<0:
             return 
+        self.masterList = []
+        self.unplaceable = False
+        with open(f"{self.mylocaladdress}\Recipes\{self.parent_Window.RestaurantName.text()}\{self.SelectRecipeName.currentText()}.json","r") as f:
+            data = json.load(f)
+            for index in range(len(data["RawMaterials"])):
+                data["RawMaterials"][index].append(f"{self.Quantity.text()}")
+                self.masterList.append(data["RawMaterials"][index])
+        print(self.masterList)
+        with open(f"{self.mylocaladdress}\Restaurant List\{self.parent_Window.RestaurantName.text()}.json","r") as f:
+            data = json.load(f)
+            for index in range(len(data["RawMaterials"])):
+                for index2 in range(len(self.masterList)):
+                    if self.masterList[index2][0]==data["RawMaterials"][index][0]:
+                        data["RawMaterials"][index][1] = f"{float(float(data["RawMaterials"][index][1])-(float(self.masterList[index2][1])*float(self.masterList[index2][2]))):.3f}"   
+                        if (float(data["RawMaterials"][index][1])<0.0):
+                            self.unplaceable = True 
+        # print(self.unplaceable)
+        # print(data)
+        if self.unplaceable == True:
+            self.msg_box = QMessageBox()
+            self.msg_box.setIcon(QMessageBox.Warning)
+            self.msg_box.setText("Item couldn't be added to Bill, as insufficient raw material availability")
+            self.msg_box.setWindowTitle("Order is not placed")
+            self.msg_box.setStandardButtons(QMessageBox.Ok)
+            retval = self.msg_box.exec_()
+            return        
         currentItemName = self.SelectRecipeName.currentText()
         if self.parent_Window.OrderList.count()>0:
             for index in range(self.parent_Window.OrderList.count()):
@@ -165,5 +190,3 @@ class AddingUI(QMainWindow):
         self.parent_Window.SubTotal.setText(f"{float(self.parent_Window.SubTotal.text())+self.totalAmount}")
         self.parent_Window.DiscountAmount.setText(f"{float(self.parent_Window.DiscountAmount.text())+self.DiscountAmountPrice}")
         self.parent_Window.GrandTotal.setText(f"{float(self.parent_Window.SubTotal.text())-float(self.parent_Window.DiscountAmount.text())}")
-
-        
