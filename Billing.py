@@ -57,8 +57,6 @@ class BillingUI(QMainWindow):
         self.currenttime.setText(self.timing)
         self.currentdate.setText(f"{self.date} {self.monthdict[int(self.month)-1]}, {self.year}")
 
-        # self.folder_name = "Not Available"
-
         if (dark_mode==True):
             self.dark_style = """
             QMainWindow {
@@ -136,14 +134,11 @@ class BillingUI(QMainWindow):
         self.file_name = "Not Found"
 
         self.CustomerName = "Null"
-        text,ok = QInputDialog.getText(self,"Customer Bill","Enter the name of Customer:")
-        if text and ok is not None:
-            self.CustomerName = text
 
         if not os.path.exists(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}"):
             os.makedirs(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}")
         
-        if self.OrderList.count()==0:
+        if self.OrderList.count() == 0:
             self.SubTotal.setText("0.0")
             self.DiscountAmount.setText("0.0")
             self.GrandTotal.setText("0.0")
@@ -206,9 +201,7 @@ class BillingUI(QMainWindow):
         self.AmountList.clear()
         self.file_name = QFileDialog.getOpenFileName(self,"Open JSON File",f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}","JSON Files(*.json)")
         templist = self.file_name[0].split('/')
-        # print(templist)
         self.file_name = templist[-1]
-        # print(self.file_name)
         self.isLoaded = True
         if self.file_name is not None:
             with open(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}\{self.file_name}","r") as f:
@@ -236,7 +229,6 @@ class BillingUI(QMainWindow):
                             self.masterList.append(lister)
         else:
             return
-
     def GenerateBillFunction(self):
         if self.isLoaded==True or self.file_name!="Not Found":
             with open(f"{self.mylocaladdress}\Restaurant List\{self.RestaurantName.text()}.json","r") as f:
@@ -290,7 +282,7 @@ class BillingUI(QMainWindow):
                 data = json.load(f)
                 for index in range(len(data["RawMaterials"])):
                     for index2 in range(len(masterList)):
-                        if masterList[index2][0]==data["RawMaterials"][index][0]:
+                        if masterList[index2][0] == data["RawMaterials"][index][0]:
                             data["RawMaterials"][index][1] = f"{float(float(data["RawMaterials"][index][1])-(float(masterList[index2][1])*float(masterList[index2][2]))):.3f}"
                             if (float(data["RawMaterials"][index][1])<0.0):
                                 self.Unplaceable = True
@@ -344,6 +336,9 @@ class BillingUI(QMainWindow):
                     print(data)
             self.close()
             return 
+        text,ok = QInputDialog.getText(self,"Customer Bill","Enter the name of Customer:")
+        if text and ok is not None:
+            self.CustomerName = text
         data = {
             "CustomerName": self.CustomerName,
             "BillingDate": self.currentdate.text(),
