@@ -18,9 +18,9 @@ class Accounts_UI(QMainWindow):
         self.CurrentDate = ""
         self.CurrentMonth = ""
         self.CurrentYear = ""
-        self.AccountsTable.setColumnWidth(0,800)
-        self.AccountsTable.setColumnWidth(1,241)
-        self.AccountsTable.setColumnWidth(2,0)
+        self.AccountsTable.setColumnWidth(0,750)
+        self.AccountsTable.setColumnWidth(1,120)
+        self.AccountsTable.setColumnWidth(2,121)
         self.parent_Window = MainWindow
         self.RestaurantName = self.parent_Window.SelectRestaurant.currentText()
         self.monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sept","Oct","Nov","Dec"]
@@ -54,26 +54,27 @@ class Accounts_UI(QMainWindow):
                         data = json.load(f)
                         for index in range(len(data["ItemList"])):
                             print(f"{data["ItemList"][index][0]}")
-                            self.mydict = {"ItemName":f"{file_name[0:len(file_name)-5]} | {data["ItemList"][index][0]}","Revenue":f"+{data["GrandTotal"]}"}
-                            self.GrandTotalAmount += float(data["GrandTotal"])
+                            self.mydict = {"ItemName":f"{file_name[0:len(file_name)-5]} | {data["ItemList"][index][0]}","Quantity":f"{data["ItemList"][index][1]}","Revenue":f"+{data["ItemList"][index][4]}"}
                             self.insertRowstoListvar.append(self.mydict)
+                        self.GrandTotalAmount += float(data["GrandTotal"])
             if os.path.exists(f"{self.mylocaladdress}\Bill {self.BillingDate} {self.RestaurantName}"):
                 for file_name in os.listdir(f"{self.mylocaladdress}\Bill {self.BillingDate} {self.RestaurantName}"):
                     with open(f"{self.mylocaladdress}\Bill {self.BillingDate} {self.RestaurantName}\{file_name}","r") as f:
                         data = json.load(f)
-                        self.mydict = {"ItemName":f"{data["NameofRawMaterial"]}","Revenue":f"-{data["Price"]}"}
+                        self.mydict = {"ItemName":f"{data["NameofRawMaterial"]}","Quantity":f"{data["Quantity"]}","Revenue":f"-{data["Price"]}"}
                         self.GrandTotalAmount -= float(data["Price"])
                         self.insertRowstoListvar.append(self.mydict)
             self.AccountsTable.setRowCount(len(self.insertRowstoListvar))
             row = 0
             for person in self.insertRowstoListvar:
                 self.AccountsTable.setItem(row,0,QTableWidgetItem(person["ItemName"]))
-                self.AccountsTable.setItem(row,1,QTableWidgetItem(person["Revenue"]))
+                self.AccountsTable.setItem(row,1,QTableWidgetItem(person["Quantity"]))
+                self.AccountsTable.setItem(row,2,QTableWidgetItem(person["Revenue"]))
                 if person["Revenue"][0]=="-":
-                    red_colored_item = self.AccountsTable.item(row,1)
+                    red_colored_item = self.AccountsTable.item(row,2)
                     red_colored_item.setForeground(QColor("darkred"))
                 else:
-                    green_colored_item = self.AccountsTable.item(row,1)
+                    green_colored_item = self.AccountsTable.item(row,2)
                     green_colored_item.setForeground(QColor("darkgreen"))
                 row+=1
             if self.GrandTotalAmount>0.0:
