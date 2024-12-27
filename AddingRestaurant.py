@@ -136,4 +136,6 @@ class AddingRestaurant_UI(QMainWindow):
             json.dump(data,f,indent=4)
             f.write('\n')
         self.ParentWindow.SelectRestaurant.addItem(f"{self.RestaurantName.text()}")
+        self.ParentWindow.SelectRestaurant.setInsertPolicy(self.ParentWindow.SelectRestaurant.InsertAtBottom)
+        self.ParentWindow.SelectRestaurant.setCurrentIndex(self.ParentWindow.SelectRestaurant.count()-1)
         self.close()
