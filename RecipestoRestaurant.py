@@ -116,6 +116,20 @@ class RecipestoRestaurant_UI(QMainWindow):
         with open(f"{self.mylocaladdress}\Restaurant List\{self.parent_Window.SelectRestaurant.currentText()}.json","w") as f:
             json.dump(data,f,indent=4)
             f.write('\n')
+        if not os.path.exists(f"{self.mylocaladdress}\Recipes"):
+            os.makedirs(f"{self.mylocaladdress}\Recipes")
+        if not os.path.exists(f"{self.mylocaladdress}\Recipes\{self.parent_Window.SelectRestaurant.currentText()}"):
+            os.makedirs(f"{self.mylocaladdress}\Recipes\{self.parent_Window.SelectRestaurant.currentText()}")
+        for index in range(self.RecipesList.count()):
+            with open(f"{self.mylocaladdress}\Recipes\{self.parent_Window.SelectRestaurant.currentText()}\{self.RecipesList.item(index).text()}.json","w") as f:
+                data = {
+                    "NameofRecipe": self.RecipesList.item(index).text(),
+                    "RecipeGenre": self.RecipeGenre.item(index).text(),
+                    "PriceofRecipe": self.RecipePrice.item(index).text(),
+                    "RawMaterials": []
+                }
+                json.dump(data,f,indent=4)
+                f.write('\n')
         self.RecipesList.clear()
         self.RecipeGenre.clear()
         self.RecipePrice.clear()
