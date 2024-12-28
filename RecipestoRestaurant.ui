@@ -81,7 +81,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Adding Items to the New Restaurant's Inventory</string>
+     <string>Adding Recipes to Restaurant's Inventory</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
