@@ -54,7 +54,7 @@ class Accounts_UI(QMainWindow):
                         data = json.load(f)
                         for index in range(len(data["ItemList"])):
                             print(f"{data["ItemList"][index][0]}")
-                            self.mydict = {"ItemName":f"{file_name[0:len(file_name)-5]} | {data["ItemList"][index][0]}","Quantity":f"{data["ItemList"][index][1]}","Revenue":f"+{data["ItemList"][index][4]}"}
+                            self.mydict = {"ItemName":f"{file_name[0:len(file_name)-5]} | {data["ItemList"][index][0]}","Quantity":f"{data["ItemList"][index][1]}","Revenue":f"+{float(data["ItemList"][index][4])-float(float(data["ItemList"][index][2])*0.01*(float(data["ItemList"][index][4])))}"}
                             self.insertRowstoListvar.append(self.mydict)
                         self.GrandTotalAmount += float(data["GrandTotal"])
             if os.path.exists(f"{self.mylocaladdress}\Bill {self.BillingDate} {self.RestaurantName}"):
