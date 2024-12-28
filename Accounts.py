@@ -44,7 +44,7 @@ class Accounts_UI(QMainWindow):
         self.CurrentDate = (str(dateSelected.toPyDate()))[8:10]
         # print(self.CurrentDate)
         self.BillingDate = f"{self.CurrentDate} {self.monthNames[int(self.CurrentMonth)-1]}, {self.CurrentYear}"
-        print(self.BillingDate)
+        # print(self.BillingDate)
         self.insertRowstoListvar = []
         self.GrandTotalAmount = 0
         if self.BillingDate!="" and ((os.path.exists(f"{self.mylocaladdress}\{self.BillingDate} {self.RestaurantName}")) or (os.path.exists(f"{self.mylocaladdress}\Bill {self.BillingDate} {self.RestaurantName}"))):
