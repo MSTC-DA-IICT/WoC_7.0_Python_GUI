@@ -139,12 +139,13 @@ class Inventory_4UI(QMainWindow):
         self.QtyofRawMaterial.setText("")
     def LoadARecipeFunction(self):
         self.file_name = QFileDialog.getOpenFileName(self,"Open JSON File",f"{self.mylocaladdress}\Recipes\{self.parent_Window.SelectRestaurant.currentText()}","JSON Files(*.json)")
-        with open(f"{self.file_name[0]}") as f:
-            data = json.load(f)
-            lister = data["RawMaterials"]
-            for index in range(len(lister)):
-                self.RawMaterialList.addItem(f"{lister[index][0]}")
-                self.QtyofRawMaterialList.addItem(f"{lister[index][1]}")
+        if self.file_name!=('',''):
+            with open(f"{self.file_name[0]}") as f:
+                data = json.load(f)
+                lister = data["RawMaterials"]
+                for index in range(len(lister)):
+                    self.RawMaterialList.addItem(f"{lister[index][0]}")
+                    self.QtyofRawMaterialList.addItem(f"{lister[index][1]}")
     def SavingRawMaterialsFunction(self):
         if self.RawMaterialList.count()==0:
             return
