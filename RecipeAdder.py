@@ -114,18 +114,5 @@ class RecipeAdder_UI(QMainWindow):
         self.parent_Window.RecipesList.addItem(f"{self.NameofRecipe.text()}")
         self.parent_Window.RecipeGenre.addItem(f"{self.mycomboBox.currentText()}")
         self.parent_Window.RecipePrice.addItem(f"{self.PriceofRecipe.text()}")
-        if not os.path.exists(f"{self.mylocaladdress}\Recipes"):
-            os.makedirs(f"{self.mylocaladdress}\Recipes")
-        if not os.path.exists(f"{self.mylocaladdress}\Recipes\{self.superparent_Window.SelectRestaurant.currentText()}"):
-            os.makedirs(f"{self.mylocaladdress}\Recipes\{self.superparent_Window.SelectRestaurant.currentText()}")
-        with open(f"{self.mylocaladdress}\Recipes\{self.superparent_Window.SelectRestaurant.currentText()}\{self.NameofRecipe.text()}.json","w") as f:
-            data = {
-                "NameofRecipe": self.NameofRecipe.text(),
-                "RecipeGenre": self.mycomboBox.currentText(),
-                "PriceofRecipe": self.PriceofRecipe.text(),
-                "RawMaterials": []
-            }
-            json.dump(data,f,indent=4)
-            f.write('\n')
         self.NameofRecipe.setText("")
         self.PriceofRecipe.setText("")
