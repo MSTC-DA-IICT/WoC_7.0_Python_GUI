@@ -231,6 +231,9 @@ class BillingUI(QMainWindow):
             return
     def GenerateBillFunction(self):
         if self.isLoaded==True or self.file_name!="Not Found":
+            with open(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}\{self.file_name}","r") as f:
+                data = json.load(f)
+                self.Billingdate = f"{data["BillingDate"]}"
             with open(f"{self.mylocaladdress}\Restaurant List\{self.RestaurantName.text()}.json","r") as f:
                 data = json.load(f)
                 for index in range(len(data["RawMaterials"])):
@@ -260,12 +263,12 @@ class BillingUI(QMainWindow):
                 json.dump(data,f,indent=4)
                 f.write('\n')
             self.isLoaded = False
-            with open(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}\{self.CustomerName}_{len(os.listdir(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}"))}.json","w") as f:
+            with open(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}\{self.file_name}","w") as f:
                 json.dump(data,f,indent=4)
                 f.write('\n')
-            self.Billingdate = f"{self.date} {self.monthdict[int(self.month)-1]}, {self.year}"
-            if not os.path.exists(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}"):
-                os.makedirs(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}")
+            # self.Billingdate = f"{self.date} {self.monthdict[int(self.month)-1]}, {self.year}"
+            # if not os.path.exists(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}"):
+            #     os.makedirs(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}")
             with open(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}\{self.CustomerName}_{len(os.listdir(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}"))}.json","w") as f:
                 json.dump(data,f,indent=4)
                 f.write('\n')
@@ -286,15 +289,15 @@ class BillingUI(QMainWindow):
                             data["RawMaterials"][index][1] = f"{float(float(data["RawMaterials"][index][1])-(float(masterList[index2][1])*float(masterList[index2][2]))):.3f}"
                             if (float(data["RawMaterials"][index][1])<0.0):
                                 self.Unplaceable = True
-                print(data)
-                print(self.Unplaceable)
+                # print(data)
+                # print(self.Unplaceable)    
             with open(f"{self.mylocaladdress}\Restaurant List\{self.RestaurantName.text()}.json","w") as f:
                 json.dump(data,f,indent=4)
                 f.write('\n')
-            print("This is self.masterList:",self.masterList)
-            print("This is masterlister:",masterlister)
-            print("This is masterList:",masterList)
-            print("This is self.SuperLister:",self.SuperLister)
+            # print("This is self.masterList:",self.masterList)
+            # print("This is masterlister:",masterlister)
+            # print("This is masterList:",masterList)
+            # print("This is self.SuperLister:",self.SuperLister)
             if (self.Unplaceable==True):
                 with open(f"{self.mylocaladdress}\Restaurant List\{self.RestaurantName.text()}.json","r") as f:
                     data = json.load(f)
@@ -321,7 +324,7 @@ class BillingUI(QMainWindow):
                 with open(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}\{self.file_name}","w") as f:
                     json.dump(data,f,indent=4)
                     f.write('\n')
-                with open(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}\{self.CustomerName}_{len(os.listdir(f"{self.mylocaladdress}\Billings\{self.RestaurantName.text()}"))}.json","w") as f:
+                with open(f"{self.mylocaladdress}\{self.Billingdate} {self.RestaurantName.text()}\{self.file_name}","w") as f:
                     json.dump(data,f,indent=4)
                     f.write('\n')
                 with open(f"{self.mylocaladdress}\Restaurant List\{self.RestaurantName.text()}.json","r") as f:
